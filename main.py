@@ -10,11 +10,11 @@ import time
 print("Getting code...")
 params = {'consumer_key': config.consumer_key, 'redirect_uri': config.redirect_uri}
 r = requests.post('https://getpocket.com/v3/oauth/request', data=params)
-print("Response code: (%s)" % r.status_code)
+print("Response code: %s" % r.status_code)
 
 # Let us now save the request token that arrived as a response.
 code = r.text[5:]
-print("Code: (%s)" % code)
+print("Code: %s" % code)
 
 # Now the user needs to authorize the application.
 # We open up the authorization page on Pocket, passing the request token and redirect URI
@@ -34,13 +34,13 @@ print("Done...")
 newParams = {'consumer_key': config.consumer_key, 'code': code}
 x = requests.post('https://getpocket.com/v3/oauth/authorize', data=newParams)
 print("Requesting access token...")
-print("Response code: (%s)" % x.status_code)
+print("Response code: %s" % x.status_code)
 
-# Store the access token and the username for future use.
+# Store the access token and the username for future use (and printing it, just because).
 access_token = x.text[13:43]
 username = x.text[53:]
-print("Access token: (%s)" % access_token)
-print("Username: (%s)" % username)
+print("Access token: %s" % access_token)
+print("Username: %s" % username)
 
 # Using the secret Consumer Key and access token, we request 10,000 articles from the user's account.
 # The articles may be read or unread.
@@ -49,22 +49,24 @@ print("Username: (%s)" % username)
 xload = {'consumer_key': config.consumer_key, 'access_token' : access_token, 'state': 'all', 'contentType': 'article', 'detailType':'complete', 'count': 10000}
 print("Requesting ALL of your saved items from Pocket...")
 allData = requests.post('https://getpocket.com/v3/get', data= xload)
-print("Response code: (%s)" % allData.status_code)
+print("Response code: %s" % allData.status_code)
+print("Data received. Processing it now...")
 
 # Converting the response to JSON, and then extracting only the required list data into the
 # variable requiredData.
 allData_dictionary= allData.json()
 requiredData = allData_dictionary['list']
 
-# We now need to iterate through all the articles and fetch the values for 'word_count'.
-# Once the word counts for all the articles have been fetched, we save the values to a dataframe.
+# We now need to iterate through all the articles and fetch the title, links and word-counts for the articles.
+# Once these values have been fetched, we save the values to a dataframe.
 # A CSV file titled 'Pocket-Data.csv' is then generated.
-cols = ['Title', 'Link']
+cols = ['Title', 'Link', 'Word Count']
 lst = []
 for p_id, p_info in requiredData.items():
     title= p_info['given_title']
     link= p_info['given_url']
-    lst.append([title, link])
+    wCount = p_info['word_count']
+    lst.append([title, link, wCount])
 df = pd.DataFrame(lst,columns=cols)
 pocket_csv_data = df.to_csv('Pocket-Data.csv', index = True)
 print("All done! You'll find the Pocket-Data.csv file in the directory.")
