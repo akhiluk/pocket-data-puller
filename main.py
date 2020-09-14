@@ -60,13 +60,12 @@ requiredData = allData_dictionary['list']
 # We now need to iterate through all the articles and fetch the title, links and word-counts for the articles.
 # Once these values have been fetched, we save the values to a dataframe.
 # A CSV file titled 'Pocket-Data.csv' is then generated.
-cols = ['Title', 'Link', 'Word Count']
+cols = ['Title', 'Link']
 lst = []
 for p_id, p_info in requiredData.items():
     title= p_info['given_title']
     link= p_info['given_url']
-    wCount = p_info['word_count']
-    lst.append([title, link, wCount])
+    lst.append([title, link])
 df = pd.DataFrame(lst,columns=cols)
 pocket_csv_data = df.to_csv('Pocket-Data.csv', index = True)
 print("All done! You'll find the Pocket-Data.csv file in the directory.")
