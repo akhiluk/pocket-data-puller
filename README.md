@@ -20,7 +20,7 @@ All of this data is dumped into a CSV file titled `pocket-data.csv`
 
 ### Command line usage
 
-`pull.py [Options]`
+`$ pull.py [Options]`
 
 #### Options
 
