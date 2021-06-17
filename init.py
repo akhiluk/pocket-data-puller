@@ -22,7 +22,7 @@ if __name__ == '__main__':
     y.set_yaml_value('request_token', request_token)
 
     # Now the user needs to authorize the application.
-    # We open up the authorization page on Pocket, passing the request toekn and redirect URI
+    # We open up the authorization page on Pocket, passing the request token and redirect URI
     # along with it.
     print("Setting up authorization page...")
     url = 'https://getpocket.com/auth/authorize?request_token={}&redirect_uri={}'.format(request_token, redirect_uri)
