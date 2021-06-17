@@ -1,0 +1,10 @@
+# Get your consumer key from the Developer API section of Pocket (https://getpocket.com/developer/docs/overview) and enter it in
+# the 'consumer_key' area.
+# 'redirect_uri' can be anything you want. Feel free to change the URL.
+# All the other keys should have their values filled in during the program's execution.
+consumer_key: 
+redirect_uri: https://twitter.com/akhiluk
+access_token: 
+request_token: 
+time_since: 
+username: 
