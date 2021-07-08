@@ -17,13 +17,21 @@ def process_results(user_data):
     # We now need to iterate through all the articles and fetch the title, link and word count for each article.
     # Once these values have been fetched, we save the values to a dataframe.
     # A CSV file titled 'pocket-data.csv' is then generated.
-    cols = ['Title', 'Link', 'Word Count']
+    cols = ['Link', 'Word Count']
     item_list = []
     for p_id, p_info in required_data.items():
-        title = p_info['resolved_title']
-        link = p_info['given_url']
-        word_count = p_info['word_count']
-        item_list.append([title, link, word_count])
+        if p_info['status'] == '2':
+            # Every item in a user's Pocket storage has a status indicator.
+            # Status code 0 indicates the item is in their to-read list.
+            # Status code 1 indicates the item is in their archive.
+            # Status code 2 indicates the item has been deleted. So if an item has a status code set to 2, there is no useful metadata we
+            # can get from it. In such cases, we simply continue with our loop.
+            continue
+        else:
+            title = p_info['resolved_title']
+            link = p_info['given_url']
+            word_count = p_info['word_count']
+            item_list.append([title, link, word_count])
     df = pd.DataFrame(item_list, columns=cols)
     pocket_csv_data = df.to_csv('pocket-data.csv', index = False)
 
